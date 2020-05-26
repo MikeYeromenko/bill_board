@@ -1,0 +1,20 @@
+{% extends 'layout/base_with_search.html' %}
+
+{% load bootstrap4 %}
+
+{% block title %}
+    {{ bb_service_title }}
+{% endblock title %}
+
+{% block content %}
+    <h2>{{ bb_service_title }} - Профиль пользователя {{ user }}</h2>
+    <form method="post" enctype="multipart/form-data" style="display: inline">
+        {% csrf_token %}
+        {% bootstrap_form form layout="horizontal" %}
+        {% bootstrap_formset formset layout="horizontal" %}
+        {% buttons submit=submit_text %}
+            {% bootstrap_button 'Отменить' button_type="link" href=previous_full_path %}
+        {% endbuttons %}
+    </form>
+
+{% endblock content %}

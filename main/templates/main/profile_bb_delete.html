@@ -1,0 +1,28 @@
+{% extends 'layout/base.html' %}
+{% load thumbnail %}
+{% load bootstrap4 %}
+
+{% block title %}
+    Удаление объявления
+{% endblock title %}
+
+{% block content %}
+    <h2>Удаление объявления</h2>
+    <div class="row">
+        {% if bb.image %}
+            <img class="mr-3" src="{% thumbnail bb.image 'default' %}" alt="Error">
+        {% endif %}
+        <div class="col">
+            <p>{{ bb.title }}</p>
+            <p>{{ bb.content }}</p>
+            <p class="font-weight-bold">{{ bb.price }} грн.</p>
+        </div>
+    </div>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p>Вы уверены, что хотите удалить данное объявление?</p>
+        {% buttons submit='Удалить' %}
+            {% bootstrap_button 'Отменить' button_type="link" href=previous_full_path %}
+        {% endbuttons %}
+    </form>
+{% endblock content %}

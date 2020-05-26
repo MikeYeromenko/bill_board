@@ -1,0 +1,65 @@
+{% extends 'layout/base.html' %}
+
+{% load static %}
+{% load bootstrap4 %}
+{% load thumbnail %}
+
+{% block content %}
+    {% block searchform %}
+        <div class="container-fluid mb-2">
+            <div class="row">
+                <div class="col">&nbsp</div>
+                <form class="col-md-auto form-inline">
+                    {% bootstrap_form form show_label=False %}
+                    {% bootstrap_button content='Искать' button_type='submit' %}
+                </form>
+            </div>
+        </div>
+    {% endblock searchform %}
+    {% block viewbills %}
+        {% if bbs %}
+            <ul class="list-unstyled">
+                {% for bb in bbs %}
+                    <li class="media my-5 p-3 border">
+                        {% url 'main:detail' bb.rubric_id bb.pk as url %}
+                        <a href="{{ url }}{{ all }}">
+                            {% if bb.image %}
+                                <img class="mr-3" src="{% thumbnail bb.image 'default' %}" alt="Error">
+                            {% else %}
+                                <img class="mr-3" src="{% static 'main/empty.jpg' %}" alt="Error while loading picture"
+                                width="96" height="96">
+                            {% endif %}
+                        </a>
+                        <div class="media-body">
+                            <h3><a href="{{ url }}{{ all }}">{{ bb.title }}</a></h3>
+                            <div>{{ bb.content|truncatechars:20 }}</div>
+                            <p class="text-right font-weight-bold">
+                                <a href="{% url 'main:by_rubric' bb.rubric_id %}">{{ bb.rubric }}</a>
+                            </p>
+                            <p class="text-right font-weight-bold">{{ bb.price }} грн.</p>
+                            <p class="text-right font-italic">{{ bb.created_at }}</p>
+    {% if bb.author_id == user.pk %}
+            <div class="row">
+                <ul class="col nav justify-content-end">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'main:profile_bb_update' bb.pk %}">Редактировать</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'main:profile_bb_delete' bb.pk %}">Удалить</a>
+                    </li>
+                </ul>
+        </div>
+    {% endif %}
+                        </div>
+
+                    </li>
+                {% endfor %}
+
+            </ul>
+            {% if page %}
+                {% bootstrap_pagination page url=keyword %}
+            {% endif %}
+        {% endif %}
+    {% endblock viewbills %}
+{% endblock content %}

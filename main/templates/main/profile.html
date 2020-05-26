@@ -1,0 +1,24 @@
+{% extends 'layout/base_with_search.html' %}
+
+{% block title %}
+    Профиль пользователя
+{% endblock title %}
+
+{% block content %}
+    <h2>Профиль пользователя {{ user.username }}</h2>
+
+    {% if user.first_name and user.last_name %}
+        <p>Здравствуйте, {{ user.first_name }} {{ user.last_name }}!</p>
+    {% else %}
+        <p>Здравствуйте!</p>
+    {% endif %}
+    <p><a href="{% url 'main:profile_bb_add' %}">Добавить объявление</a></p>
+
+    <h3>Ваши объявления</h3>
+
+    {% block viewbills %}
+        {% with bbs=bbs user=user %}
+            {{ block.super }}
+        {% endwith %}
+    {% endblock viewbills %}
+{% endblock content %}

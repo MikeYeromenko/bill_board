@@ -1,0 +1,31 @@
+{% extends 'layout/base.html' %}
+
+{% load bootstrap4 %}
+
+{% block title %}
+    Вход
+{% endblock title %}
+
+{% block content %}
+    <h2>Вход</h2>
+    {% if user.is_authenticated %}
+        <p>Вы уже выполнили вход</p>
+    {% else %}
+        <form method="post">
+            {% csrf_token %}
+            {% bootstrap_form form layout='horizontal' %}
+            <input type="hidden" name="next" value="{{ next }}">
+        <div class="nav justify-content-center">
+            {% buttons submit='Войти в аккаунт' %}{% endbuttons %}
+        </div>
+        </form>
+
+
+
+        <form class="google" action="{% url "social:begin" "google-oauth2" %}" method="get">
+            {% buttons submit="Войти через Google" %}{% endbuttons %}
+        </form>
+        <p>Для того, чтобы оставить объявление, нужно <a href="{% url 'main:register' %}">зарегистрироваться</a></p>
+        <p>Либо, если Вы зарегистрированный пользователь, войдите в свою учётную запись</p>
+    {% endif %}
+{% endblock content %}

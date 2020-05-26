@@ -1,0 +1,104 @@
+{% extends 'layout/base.html' %}
+
+{% load bootstrap4 %}
+
+{% block title %}
+    {{ bb.title }} - {{ bb.ribric.name }}
+{% endblock title %}
+
+{% block content %}
+    <div class="container-fluid mt-3">
+        <div class="row">
+            {% if bb.image %}
+                <div class="col-md-auto"><img src="{{ bb.image.url }}" class="main-image" alt="no image"></div>
+            {% endif %}
+            <div class="col">
+                {% if bb.author_id == user.pk %}
+                    <div class="row">
+                        <ul class="col nav border">
+                            <li class="nav-item">
+                                <a class="nav-link"href="{% url 'main:profile_bb_update' bb.pk %}">Редактировать</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'main:profile_bb_delete' bb.pk %}">Удалить</a>
+                            </li>
+                        </ul>
+                    </div>
+                {% endif %}
+                <h2>{{ bb.title }}</h2>
+                <p>{{ bb.content }}</p>
+                <p class="font-weight-bold">{{ bb.price }} грн.</p>
+                <p>{{ bb.contacts }}</p>
+                <p class="text-right font-italic">Объявление добавлено {{ bb.created_at }}</p>
+            </div>
+        </div>
+    </div>
+    {% if ais %}
+        <div class="d-flex justify-content-between flex-wrap mt-5">
+            {% for ai in ais %}
+                <div>
+                    <img class="additional-image" src="{{ ai.image.url }}" alt="">
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <p><a href="{{ previous_url }}">Назад</a></p>
+    <h4 class="mt-5">Новый комментарий</h4>
+    <form method="post">
+        {% csrf_token %}
+        {% bootstrap_form form layout="horizontal" %}
+        {% buttons submit="Добавить" %}{% endbuttons %}
+    </form>
+    {% if comments %}
+        <div class="mt-5">
+            {% for comment in comments %}
+                <div class="my-2 p-2 border">
+                    {% if comment.parent_comment %}
+                        <p class="text-right font-italic">Ответ на комментарий пользователя <strong>
+                            {{ comment.parent_comment.author_name }}</strong> от {{ comment.parent_comment.created_at }}
+                        </p>
+                    {% endif %}
+                    <h5>{{ comment.author_name }}</h5>
+                    <p>{{ comment.content }}</p>
+                    <p class="text-right font-italic">{{ comment.created_at }}</p>
+
+                <div>
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"
+                    role="button" aria-haspopup="true" aria-expanded="false">Ответить на комментарий</a>
+                    <div class="dropdown-menu">
+                            <form class="dropdown-item font-italic" method="post"
+                                  action="{% url 'main:comment' bb.rubric_id bb.pk comment.pk %}">
+                                {% csrf_token %}
+                                {% bootstrap_form form layout="horizontal" %}
+                                {% buttons submit="Добавить" %}{% endbuttons %}
+                            </form>
+                        <div class="row">
+                            <form class="col dropdown-item font-italic" method="post"
+                                  action="{% url 'main:likes_dislikes' choice='like' pk=comment.pk %}">
+                                {% csrf_token %}
+                                {% buttons submit="Поставить лайк)" %}{% endbuttons %}
+                            </form>
+                            <form class="col dropdown-item font-italic" method="post"
+                                  action="{% url 'main:likes_dislikes' choice='dislike' pk=comment.pk %}">
+                                {% csrf_token %}
+                                {% buttons submit="Дислайк(" %}{% endbuttons %}
+                            </form>
+                            <form class="col dropdown-item font-italic" method="post"
+                                  action="{% url 'main:complain' pk=comment.pk %}">
+                                {% csrf_token %}
+                                {% buttons submit="Пожаловаться" %}{% endbuttons %}
+                            </form>
+                        </div>
+                    </div>
+                <p class="text-center">Лайков):{{ comment.likes }}&nbsp;&nbsp; Дислайков(: {{ comment.dislikes }}
+                    {% if comment.complain %}
+                        <strong>На комментарий получена жалоба</strong>
+                    {% endif %}
+                </p>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+
+{% endblock content %}

@@ -1,0 +1,17 @@
+{% extends 'layout/base_with_search.html' %}
+
+
+{% block title %}
+    Последние 10 объявлений
+{% endblock title %}
+
+
+{% block content %}
+    <h2 class="mb-2">Последние 10 объявлений</h2>
+    {% block viewbills %}
+        {% with bbs=bbs %}
+            {{ block.super }}
+        {% endwith %}
+    {% endblock viewbills %}
+
+{% endblock content %}

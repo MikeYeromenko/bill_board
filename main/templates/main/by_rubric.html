@@ -1,0 +1,22 @@
+{% extends 'layout/base_with_search.html' %}
+
+{% block title %}
+    {{ rubric }}
+{% endblock title %}
+
+
+{% block content %}
+    <h2 class="mb-2">{{ rubric }}</h2>
+    {% block searchform %}
+        {% with form=form %}
+            {{ block.super }}
+        {% endwith %}
+    {% endblock searchform %}
+    {% block viewbills %}
+        {% with bbs=bbs all=all page=page %}
+            {{ block.super }}
+        {% endwith %}
+    {% endblock viewbills %}
+
+
+{% endblock content %}

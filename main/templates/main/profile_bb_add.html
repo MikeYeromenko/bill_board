@@ -1,0 +1,13 @@
+{% extends 'layout/profile_bb_crud.html' %}
+
+{% block title %}
+    {% with bb_service_title="Создать новое объявление" %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock title %}
+
+{% block content %}
+    {% with bb_service_title="Создать новое объявление" submit_text="Сохранить" %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock content %}

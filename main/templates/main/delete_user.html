@@ -1,0 +1,17 @@
+{% extends 'layout/base_with_search.html' %}
+{% load bootstrap4 %}
+
+{% block title %}
+    Удаление пользователя
+{% endblock title %}
+
+{% block content %}
+    <h2>Удаление пользователя {{ user.username }}</h2>
+    <form method="post">
+        {% csrf_token %}
+        <p>Вы уверены, что хотите удалить профиль пользователя {{ user.username }}?</p>
+        {% buttons submit='Удалить' %}
+            {% bootstrap_button 'Отменить' button_type="link" href=http_referer %}
+        {% endbuttons %}
+    </form>
+{% endblock content %}
